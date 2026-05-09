@@ -1,4 +1,5 @@
 const express = require("express")
+const cors = require("cors")
 const morgan = require("morgan")
 const configureDB = require("./config/db")
 const authController = require("./controllers/auth.controller")
@@ -8,6 +9,7 @@ const parkingTicketController = require("./controllers/parkingTicket.controller"
 require("dotenv").config()
 const port = process.env.PORT
 const app = express()
+app.use(cors())
 app.use(express.json())
 app.use(morgan("dev"))
 
