@@ -27,7 +27,7 @@ exports.createParkingTicket = async (req, res) => {
         const parkingSlot =
             await ParkingSlot.findOneAndUpdate({ slotType: vehicleType, isOccupied: false },
                 { $set: { isOccupied: true } },
-                { new: true, sort: { slotNumber: 1 }, session }
+                { new: true, sort: { slotNumber: 1 }, session, runValidators: true, context: "query" }
             );
         if (!parkingSlot) {
             await session.abortTransaction();
@@ -95,7 +95,8 @@ exports.exitVehicle = async (req, res) => {
         parkingTicket.amount = amount;
         parkingTicket.isActive = false;
         await parkingTicket.save({ session });
-        await ParkingSlot.findByIdAndUpdate(parkingTicket.slotNumber._id, { isOccupied: false }, { session });
+        await ParkingSlot.findByIdAndUpdate(parkingTicket.slotNumber._id, { isOccupied: false },
+            { session, runValidators: true, context: "query" });
         await session.commitTransaction();
         session.endSession();
         return res.status(200).json({ success: true, message: "Vehicle exit completed successfully", parkingTicket });

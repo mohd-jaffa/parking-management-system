@@ -69,10 +69,14 @@ const parkingTicketSchema = new mongoose.Schema(
 
 parkingTicketSchema.pre("save", async function (next) {
     if (!this.ticketNumber) {
+        const session = this.$session()
         const counter = await Counter.findOneAndUpdate(
             { name: "parkingTicket" },
             { $inc: { counterValue: 1 } },
-            { new: true, upsert: true }
+            {
+                new: true, upsert: true, runValidators: true,
+                context: "query", setDefaultsOnInsert: true
+            }
         )
         this.ticketNumber = String(counter.counterValue).padStart(4, "0")
     }
