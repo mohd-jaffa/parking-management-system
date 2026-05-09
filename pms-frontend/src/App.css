@@ -596,6 +596,65 @@
   }
 }
 
+.vehicles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vehicle-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &:hover {
+    border-color: var(--accent-border);
+    box-shadow: var(--shadow);
+  }
+}
+
+.vehicle-card-active {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.vehicle-card-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vehicle-number {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-h);
+  flex: 1;
+}
+
+.vehicle-since {
+  font-size: 12px;
+  color: var(--text);
+}
+
+.history-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 200px;
+}
+
+.history-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .page-center {
   display: flex;
   flex-grow: 1;

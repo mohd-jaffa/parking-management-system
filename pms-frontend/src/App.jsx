@@ -9,6 +9,7 @@ import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import SlotsPage from './pages/SlotsPage'
 import TicketsPage from './pages/TicketsPage'
+import VehiclesPage from './pages/VehiclesPage'
 import Navbar from './components/Navbar'
 import ProtectedRoute from './routes/ProtectedRoute'
 import './App.css'
@@ -80,6 +81,14 @@ function App() {
           element={
             <ProtectedRoute>
               <TicketsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/vehicles"
+          element={
+            <ProtectedRoute>
+              <VehiclesPage />
             </ProtectedRoute>
           }
         />

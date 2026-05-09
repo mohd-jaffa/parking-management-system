@@ -23,6 +23,7 @@ function Navbar() {
             <Link to="/dashboard" className="nav-link">Dashboard</Link>
             <Link to="/slots" className="nav-link">Slots</Link>
             <Link to="/tickets" className="nav-link">Tickets</Link>
+            <Link to="/vehicles" className="nav-link">Vehicles</Link>
             <span className="nav-user">{user?.name}</span>
             <button className="nav-logout-btn" onClick={handleLogout}>Logout</button>
           </>
