@@ -1,4 +1,5 @@
 const ParkingSlot = require("../models/parkingSlot.model")
+const mongoose = require("mongoose")
 
 exports.createParkingSlot = async (req, res) => {
     try {
@@ -29,6 +30,7 @@ exports.getParkingSlots = async (req, res) => {
         const parkingSlots = await ParkingSlot.find().sort({ slotNumber: 1 });
         return res.status(200).json({ success: true, count: parkingSlots.length, parkingSlots });
     } catch (error) {
+        console.log(error)
         return res.status(500).json({ success: false, message: "Something went wrong!" });
     }
 };
