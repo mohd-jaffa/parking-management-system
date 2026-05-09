@@ -43,6 +43,7 @@ exports.createParkingTicket = async (req, res) => {
     } catch (error) {
         await session.abortTransaction();
         session.endSession();
+        console.log(error);
         if (error.name === "ValidationError") {
             const errors = Object.values(error.errors).map((err) => err.message);
             return res.status(400).json({ success: false, errors });
@@ -51,3 +52,58 @@ exports.createParkingTicket = async (req, res) => {
     }
 };
 
+
+exports.exitVehicle = async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+        const { ticketId } = req.params;
+        const parkingTicket = await ParkingTicket.findOne({ _id: ticketId, isActive: true })
+            .populate("vehicleNumber").populate("slotNumber").session(session);
+        if (!parkingTicket) {
+            await session.abortTransaction();
+            session.endSession();
+            return res.status(404).json({ success: false, message: "Active parking ticket not found" });
+        }
+
+        const exitTime = new Date();
+        const entryTime = parkingTicket.entryTime;
+        const durationInMs = exitTime - entryTime;
+        const durationInHours = Math.ceil(durationInMs / (1000 * 60 * 60));
+        const vehicleType = parkingTicket.vehicleNumber.vehicleType;
+
+        let amount = 0;
+        if (vehicleType === "bike") {
+            amount = 10;
+            if (durationInHours > 1) {
+                amount += (durationInHours - 1) * 5;
+            }
+        }
+        else if (vehicleType === "car") {
+            amount = 20;
+            if (durationInHours > 1) {
+                amount += (durationInHours - 1) * 10;
+            }
+        }
+        else if (vehicleType === "truck") {
+            amount = 30;
+            if (durationInHours > 1) {
+                amount += (durationInHours - 1) * 15;
+            }
+        }
+
+        parkingTicket.exitTime = exitTime;
+        parkingTicket.amount = amount;
+        parkingTicket.isActive = false;
+        await parkingTicket.save({ session });
+        await ParkingSlot.findByIdAndUpdate(parkingTicket.slotNumber._id, { isOccupied: false }, { session });
+        await session.commitTransaction();
+        session.endSession();
+        return res.status(200).json({ success: true, message: "Vehicle exit completed successfully", parkingTicket });
+    } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+        console.log(error);
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
