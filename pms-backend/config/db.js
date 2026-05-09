@@ -6,6 +6,7 @@ async function configureDB() {
         console.log("connected to db");
     } catch (err) {
         console.log("error connecting to db");
+        process.exit(1);
     }
 }
 
