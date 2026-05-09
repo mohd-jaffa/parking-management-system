@@ -63,6 +63,7 @@ const parkingTicketSchema = new mongoose.Schema(
     },
     {
         timestamps: true,
+        strict: "throw",
     }
 )
 

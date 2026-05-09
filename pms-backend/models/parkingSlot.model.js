@@ -28,6 +28,7 @@ const parkingSlotSchema = new mongoose.Schema(
     },
     {
         timestamps: true,
+        strict: "throw",
     }
 )
 

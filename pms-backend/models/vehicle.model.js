@@ -6,10 +6,12 @@ const vehicleSchema = new mongoose.Schema(
         vehicleNumber: {
             type: String,
             required: [true, "Vehicle number is required"],
+            unique: true,
             trim: true,
             uppercase: true,
             minlength: [4, "Vehicle number is too short"],
             maxlength: [10, "Vehicle number is too long"],
+            set: (value) => value.replace(/\s+/g, ""),
         },
 
         vehicleType: {
@@ -25,6 +27,7 @@ const vehicleSchema = new mongoose.Schema(
     },
     {
         timestamps: true,
+        strict: "throw",
     }
 )
 
