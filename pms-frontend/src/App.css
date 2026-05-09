@@ -260,21 +260,27 @@
   display: flex;
   flex: 1;
   min-height: 0;
+  height: calc(100svh - 56px);
 
   @media (max-width: 1024px) {
     flex-direction: column;
+    height: auto;
   }
 }
 
 .split-panel {
   flex: 1;
   padding: 32px;
-  overflow-y: auto;
   box-sizing: border-box;
+  overflow-y: visible;
 
   @media (max-width: 1024px) {
     padding: 24px 20px;
   }
+}
+
+.split-panel-scroll {
+  overflow-y: auto;
 }
 
 .split-divider {
@@ -661,6 +667,7 @@
   align-items: center;
   justify-content: center;
   padding: 32px 20px;
+  overflow-y: auto;
 }
 
 .landing-card,

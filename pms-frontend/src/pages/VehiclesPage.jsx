@@ -63,7 +63,7 @@ function VehiclesPage() {
 
   return (
     <div className="split-page">
-      <div className="split-panel">
+      <div className="split-panel split-panel-scroll">
         <div className="panel-header">
           <h2 className="panel-title">Vehicles</h2>
           <button className="btn-refresh" onClick={fetchVehicles}>Refresh</button>
@@ -104,7 +104,7 @@ function VehiclesPage() {
 
       <div className="split-divider" />
 
-      <div className="split-panel">
+      <div className="split-panel split-panel-scroll">
         {!selectedVehicle ? (
           <div className="history-empty">
             <p className="panel-info">Select a vehicle to view its ticket history.</p>

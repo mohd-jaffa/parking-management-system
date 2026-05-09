@@ -124,7 +124,7 @@ function TicketsPage() {
 
       <div className="split-divider" />
 
-      <div className="split-panel">
+      <div className="split-panel split-panel-scroll">
         <div className="panel-header">
           <h2 className="panel-title">Tickets</h2>
           <button className="btn-refresh" onClick={() => fetchTickets(statusFilter)}>Refresh</button>

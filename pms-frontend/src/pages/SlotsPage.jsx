@@ -97,7 +97,7 @@ function SlotsPage() {
 
       <div className="split-divider" />
 
-      <div className="split-panel">
+      <div className="split-panel split-panel-scroll">
         <div className="panel-header">
           <h2 className="panel-title">Parking Slots</h2>
           <button className="btn-refresh" onClick={fetchSlots}>Refresh</button>
