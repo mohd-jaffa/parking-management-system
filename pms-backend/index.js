@@ -4,6 +4,7 @@ const configureDB = require("./config/db")
 const authController = require("./controllers/auth.controller")
 const authenticateUser = require("./middlewares/auth.middleware")
 const parkingSlotController = require("./controllers/parkingSlot.controller")
+const parkingTicketController = require("./controllers/parkingTicket.controller")
 require("dotenv").config()
 const port = process.env.PORT
 const app = express()
@@ -24,6 +25,9 @@ app.get( "/api/auth/profile", authenticateUser, authController.getProfile );
 // SLOT ROUTES
 app.post( "/api/slots", authenticateUser, parkingSlotController.createParkingSlot );
 app.get( "/api/slots", authenticateUser, parkingSlotController.getParkingSlots );
+
+// TICKET ROUTES
+app.post( "/api/tickets", authenticateUser, parkingTicketController.createParkingTicket );
 
 app.listen(port, () => {
     console.log("Server running on port", port)
