@@ -28,6 +28,7 @@ app.get( "/api/slots", authenticateUser, parkingSlotController.getParkingSlots )
 
 // TICKET ROUTES
 app.post( "/api/tickets", authenticateUser, parkingTicketController.createParkingTicket );
+app.put( "/api/tickets/exit/:id", authenticateUser, parkingTicketController.exitVehicle );
 
 app.listen(port, () => {
     console.log("Server running on port", port)

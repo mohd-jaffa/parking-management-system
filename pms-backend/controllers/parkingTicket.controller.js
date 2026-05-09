@@ -57,8 +57,8 @@ exports.exitVehicle = async (req, res) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-        const { ticketId } = req.params;
-        const parkingTicket = await ParkingTicket.findOne({ _id: ticketId, isActive: true })
+        const { id } = req.params;
+        const parkingTicket = await ParkingTicket.findOne({ _id: id, isActive: true })
             .populate("vehicleNumber").populate("slotNumber").session(session);
         if (!parkingTicket) {
             await session.abortTransaction();
