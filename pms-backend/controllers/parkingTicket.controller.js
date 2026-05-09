@@ -3,6 +3,7 @@ const Vehicle = require("../models/vehicle.model")
 const ParkingSlot = require("../models/parkingSlot.model")
 const ParkingTicket = require("../models/parkingTicket.model")
 const { calculateParkingFee } = require("../utils/parking.utils")
+const { handleError } = require("../utils/errorHandler.utils")
 
 exports.createParkingTicket = async (req, res) => {
     const session = await mongoose.startSession();
@@ -44,12 +45,7 @@ exports.createParkingTicket = async (req, res) => {
     } catch (error) {
         await session.abortTransaction();
         session.endSession();
-        console.log(error);
-        if (error.name === "ValidationError") {
-            const errors = Object.values(error.errors).map((err) => err.message);
-            return res.status(400).json({ success: false, errors });
-        }
-        return res.status(500).json({ success: false, message: "Something went wrong!" });
+        return handleError(error, res);
     }
 };
 
@@ -83,8 +79,7 @@ exports.exitVehicle = async (req, res) => {
     } catch (error) {
         await session.abortTransaction();
         session.endSession();
-        console.log(error);
-        return res.status(500).json({ success: false, message: "Something went wrong!" });
+        return handleError(error, res);
     }
 };
 
@@ -116,7 +111,6 @@ exports.getParkingTickets = async (req, res) => {
             .sort({ createdAt: -1 });
         return res.status(200).json({ success: true, count: parkingTickets.length, parkingTickets });
     } catch (error) {
-        console.log(error)
-        return res.status(500).json({ success: false, message: "Something went wrong!" });
+        return handleError(error, res);
     }
 };

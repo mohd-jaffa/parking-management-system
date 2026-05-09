@@ -1,5 +1,6 @@
 const User = require("../models/user.model")
 const jwt = require("jsonwebtoken")
+const { handleError } = require("../utils/errorHandler.utils")
 
 exports.register = async (req, res) => {
     try {
@@ -21,12 +22,7 @@ exports.register = async (req, res) => {
             },
         });
     } catch (error) {
-        console.log(error);
-        if (error.name === "ValidationError") {
-            const errors = Object.values(error.errors).map((err) => err.message);
-            return res.status(400).json({ success: false, errors });
-        }
-        res.status(500).json({ success: false, message: "Something went wrong!" });
+        return handleError(error, res);
     }
 };
 
@@ -57,8 +53,7 @@ exports.login = async (req, res) => {
             },
         });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ success: false, message: "Something went wrong!" });
+        return handleError(error, res);
     }
 };
 
@@ -70,7 +65,6 @@ exports.getProfile = async (req, res) => {
         }
         return res.status(200).json({ success: true, user });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: "Something went wrong!" });
+        return handleError(error, res);
     }
 };

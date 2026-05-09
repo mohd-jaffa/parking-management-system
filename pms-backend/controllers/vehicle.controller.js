@@ -1,14 +1,14 @@
 const Vehicle = require("../models/vehicle.model")
 const ParkingTicket = require("../models/parkingTicket.model")
 const mongoose = require("mongoose")
+const { handleError } = require("../utils/errorHandler.utils")
 
 exports.getVehicles = async (req, res) => {
     try {
         const vehicles = await Vehicle.find().sort({ createdAt: -1 });
         return res.status(200).json({ success: true, count: vehicles.length, vehicles });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: "Something went wrong!" });
+        return handleError(error, res);
     }
 };
 
@@ -27,7 +27,6 @@ exports.getVehicleTickets = async (req, res) => {
             .sort({ createdAt: -1 });
         return res.status(200).json({ success: true, vehicle, count: tickets.length, tickets });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: "Something went wrong!" });
+        return handleError(error, res);
     }
 };

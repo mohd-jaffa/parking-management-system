@@ -1,17 +1,13 @@
 const ParkingSlot = require("../models/parkingSlot.model")
 const mongoose = require("mongoose")
+const { handleError } = require("../utils/errorHandler.utils")
 
 exports.createParkingSlot = async (req, res) => {
     try {
         const parkingSlot = await ParkingSlot.create(req.body);
         return res.status(201).json({ success: true, message: "Parking slot created successfully", parkingSlot });
     } catch (error) {
-        console.log(error);
-        if (error.name === "ValidationError") {
-            const errors = Object.values(error.errors).map((err) => err.message);
-            return res.status(400).json({ success: false, errors });
-        }
-        return res.status(500).json({ success: false, message: "Something went wrong!" });
+        return handleError(error, res);
     }
 };
 
@@ -31,7 +27,6 @@ exports.getParkingSlots = async (req, res) => {
         const parkingSlots = await ParkingSlot.find().sort({ slotNumber: 1 });
         return res.status(200).json({ success: true, count: parkingSlots.length, parkingSlots });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: "Something went wrong!" });
+        return handleError(error, res);
     }
 };
