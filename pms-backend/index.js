@@ -27,6 +27,7 @@ app.post( "/api/slots", authenticateUser, parkingSlotController.createParkingSlo
 app.get( "/api/slots", authenticateUser, parkingSlotController.getParkingSlots );
 
 // TICKET ROUTES
+app.get( "/api/tickets", authenticateUser, parkingTicketController.getParkingTickets );
 app.post( "/api/tickets", authenticateUser, parkingTicketController.createParkingTicket );
 app.put( "/api/tickets/exit/:id", authenticateUser, parkingTicketController.exitVehicle );
 

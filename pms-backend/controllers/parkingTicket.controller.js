@@ -107,3 +107,36 @@ exports.exitVehicle = async (req, res) => {
         return res.status(500).json({ success: false, message: error.message });
     }
 };
+
+exports.getParkingTickets = async (req, res) => {
+    try {
+        const { id, status } = req.query;
+        if (id) {
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                return res.status(400).json({ success: false, message: "Invalid ticket id" });
+            }
+            const parkingTicket = await ParkingTicket.findById(id)
+                .populate("vehicleNumber", "vehicleNumber vehicleType")
+                .populate("slotNumber", "slotNumber slotType");
+            if (!parkingTicket) {
+                return res.status(404).json({ success: false, message: "Parking ticket not found" });
+            }
+            return res.status(200).json({ success: true, parkingTicket });
+        }
+        const filter = {};
+        if (status) {
+            if (status !== "active" && status !== "inactive") {
+                return res.status(400).json({ success: false, message: "Status must be active or inactive" });
+            }
+            filter.isActive = status === "active";
+        }
+        const parkingTickets = await ParkingTicket.find(filter)
+            .populate("vehicleNumber", "vehicleNumber vehicleType")
+            .populate("slotNumber", "slotNumber slotType")
+            .sort({ createdAt: -1 });
+        return res.status(200).json({ success: true, count: parkingTickets.length, parkingTickets });
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
