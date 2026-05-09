@@ -70,22 +70,11 @@ const parkingTicketSchema = new mongoose.Schema(
 parkingTicketSchema.pre("save", async function (next) {
     if (!this.ticketNumber) {
         const counter = await Counter.findOneAndUpdate(
-            {
-                name: "parkingTicket",
-            },
-            {
-                $inc: {
-                    counterValue: 1,
-                },
-            },
-            {
-                new: true,
-                upsert: true,
-            }
+            { name: "parkingTicket" },
+            { $inc: { counterValue: 1 } },
+            { new: true, upsert: true }
         )
-        this.ticketNumber = String(
-            counter.counterValue
-        ).padStart(4, "0")
+        this.ticketNumber = String(counter.counterValue).padStart(4, "0")
     }
     next();
 })

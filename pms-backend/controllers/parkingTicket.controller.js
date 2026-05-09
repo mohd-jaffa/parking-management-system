@@ -52,7 +52,6 @@ exports.createParkingTicket = async (req, res) => {
     }
 };
 
-
 exports.exitVehicle = async (req, res) => {
     const session = await mongoose.startSession();
     session.startTransaction();
