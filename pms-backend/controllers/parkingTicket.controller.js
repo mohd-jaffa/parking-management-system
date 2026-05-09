@@ -2,6 +2,7 @@ const mongoose = require("mongoose")
 const Vehicle = require("../models/vehicle.model")
 const ParkingSlot = require("../models/parkingSlot.model")
 const ParkingTicket = require("../models/parkingTicket.model")
+const { calculateParkingFee } = require("../utils/parking.utils")
 
 exports.createParkingTicket = async (req, res) => {
     const session = await mongoose.startSession();
@@ -67,29 +68,8 @@ exports.exitVehicle = async (req, res) => {
 
         const exitTime = new Date();
         const entryTime = parkingTicket.entryTime;
-        const durationInMs = exitTime - entryTime;
-        const durationInHours = Math.ceil(durationInMs / (1000 * 60 * 60));
         const vehicleType = parkingTicket.vehicleNumber.vehicleType;
-
-        let amount = 0;
-        if (vehicleType === "bike") {
-            amount = 10;
-            if (durationInHours > 1) {
-                amount += (durationInHours - 1) * 5;
-            }
-        }
-        else if (vehicleType === "car") {
-            amount = 20;
-            if (durationInHours > 1) {
-                amount += (durationInHours - 1) * 10;
-            }
-        }
-        else if (vehicleType === "truck") {
-            amount = 30;
-            if (durationInHours > 1) {
-                amount += (durationInHours - 1) * 15;
-            }
-        }
+        const amount = calculateParkingFee(vehicleType, entryTime, exitTime);
 
         parkingTicket.exitTime = exitTime;
         parkingTicket.amount = amount;
