@@ -48,7 +48,7 @@ exports.createParkingTicket = async (req, res) => {
             const errors = Object.values(error.errors).map((err) => err.message);
             return res.status(400).json({ success: false, errors });
         }
-        return res.status(500).json({ success: false, message: error.message });
+        return res.status(500).json({ success: false, message: "Something went wrong!" });
     }
 };
 
@@ -103,7 +103,7 @@ exports.exitVehicle = async (req, res) => {
         await session.abortTransaction();
         session.endSession();
         console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        return res.status(500).json({ success: false, message: "Something went wrong!" });
     }
 };
 
@@ -136,6 +136,6 @@ exports.getParkingTickets = async (req, res) => {
         return res.status(200).json({ success: true, count: parkingTickets.length, parkingTickets });
     } catch (error) {
         console.log(error)
-        return res.status(500).json({ success: false, message: error.message });
+        return res.status(500).json({ success: false, message: "Something went wrong!" });
     }
 };
