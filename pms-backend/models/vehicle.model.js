@@ -27,4 +27,8 @@ const vehicleSchema = new mongoose.Schema(
     }
 )
 
+vehicleSchema.plugin(uniqueValidator, {
+    message: "This {PATH} is already added",
+})
+
 module.exports = mongoose.model("Vehicle", vehicleSchema)
