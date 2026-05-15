@@ -28,6 +28,8 @@ app.get( "/api/auth/profile", authenticateUser, authController.getProfile );
 // SLOT ROUTES
 app.post( "/api/slots", authenticateUser, parkingSlotController.createParkingSlot );
 app.get( "/api/slots", authenticateUser, parkingSlotController.getParkingSlots );
+app.delete( "/api/slots/:id", parkingSlotController.deleteParkingSlot );
+app.put( "/api/slots/:id", parkingSlotController.restoreParkingSlot );
 
 // TICKET ROUTES
 app.get( "/api/tickets", authenticateUser, parkingTicketController.getParkingTickets );

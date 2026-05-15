@@ -86,6 +86,8 @@ exports.exitVehicle = async (req, res) => {
 exports.getParkingTickets = async (req, res) => {
     try {
         const { id, status } = req.query;
+        const limit = req.query.limit;
+        const page = req.query.page;
         if (id) {
             if (!mongoose.Types.ObjectId.isValid(id)) {
                 return res.status(400).json({ success: false, message: "Invalid ticket id" });
@@ -105,11 +107,12 @@ exports.getParkingTickets = async (req, res) => {
             }
             filter.isActive = status === "active";
         }
-        const parkingTickets = await ParkingTicket.find(filter)
+        let skip = (page - 1) * limit;
+        const parkingTickets = await ParkingTicket.find(filter).skip(skip).limit(limit)
             .populate("vehicleNumber", "vehicleNumber vehicleType")
             .populate("slotNumber", "slotNumber slotType")
             .sort({ createdAt: -1 });
-        return res.status(200).json({ success: true, count: parkingTickets.length, parkingTickets });
+        return res.status(200).json({ success: true, count: parkingTickets.length, page: page, parkingTickets });
     } catch (error) {
         return handleError(error, res);
     }
