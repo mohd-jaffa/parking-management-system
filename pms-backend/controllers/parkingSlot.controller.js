@@ -11,6 +11,38 @@ exports.createParkingSlot = async (req, res) => {
     }
 };
 
+exports.deleteParkingSlot = async (req, res) => {
+    const id = req.params.id;
+    try {
+        if (!id) {
+            return handleError(Error, res);
+        }
+        const parkingSlot = await ParkingSlot.findByIdAndUpdate(id, { isDeleted: true }, { new: true, runValidators: true });
+        if (!parkingSlot) {
+            return res.status(404).json({ success: false, message: "parking slot not found" });
+        }
+        return res.status(201).json({ success: true, message: "Parking slot soft deleted successfully", parkingSlot });
+    } catch (error) {
+        return handleError(error, res);
+    }
+}
+
+exports.restoreParkingSlot = async (req, res) => {
+    const id = req.params.id;
+    try {
+        if (!id) {
+            return handleError(Error, res);
+        }
+        const parkingSlot = await ParkingSlot.findByIdAndUpdate(id, { isDeleted: false }, { new: true, runValidators: true });
+        if (!parkingSlot) {
+            return res.status(404).json({ success: false, message: "parking slot not found" });
+        }
+        return res.status(201).json({ success: true, message: "Parking slot restored successfully", parkingSlot });
+    } catch (error) {
+        return handleError(error, res);
+    }
+}
+
 exports.getParkingSlots = async (req, res) => {
     try {
         const { _id } = req.query;
